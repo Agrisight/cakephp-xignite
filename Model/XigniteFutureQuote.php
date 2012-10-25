@@ -26,31 +26,31 @@ class XigniteFutureQuote extends XigniteFuturesModel {
  * @var array
  */
 	public $_schema = array(
-        'Outcome' => array('type' => 'string'),
-        'Delay' => array('type' => 'integer'),
-        'Future' => array(
-            'Outcome' => "Success",
-            'Delay' => "0",
-            'Symbol' => "ZC",
-            'Name' => "Corn",
-            'Month' => "12",
-            'Year' => "2012",
-            'Exchange' => "CBOT",
-            'ExchangeSymbol' => "ZCZ2",
-            'Type' => "Future"
-        ),
-        'Date' => array('type' => 'date'),
-        'Open' => array('type' => 'float'),
-        'High' => array('type' => 'float'),
-        'Low' => array('type' => 'float'),
-        'Last' => array('type' => 'float'),
-        'Settle' => array('type' => 'float'),
-        'Volume' => array('type' => 'integer'),
-        'OpenInterest' => array('type' => 'integer'),
-        'PreviousClose' => array('type' => 'float'),
-        'Change' => array('type' => 'float'),
-        'PercentChange' => array('type' => 'float'),
-        'Currency' => array('type' => 'string')
+        'outcome' => array('type' => 'string'),
+        'delay' => array('type' => 'float'),
+        'future' => array('type' => array(
+            'outcome' => array('type' => 'string'),
+            'delay' => array('type' => 'float'),
+            'symbol' => array('type' => 'string'),
+            'name' => array('type' => 'string'),
+            'month' => array('type' => 'integer'),
+            'year' => array('type' => 'integer'),
+            'exchange' => array('type' => 'string'),
+            'exchangesymbol' => array('type' => 'string'),
+            'type' => array('type' => 'string')
+        )),
+        'date' => array('type' => 'date'),
+        'open' => array('type' => 'float'),
+        'high' => array('type' => 'float'),
+        'low' => array('type' => 'float'),
+        'last' => array('type' => 'float'),
+        'settle' => array('type' => 'float'),
+        'volume' => array('type' => 'integer'),
+        'openinterest' => array('type' => 'integer'),
+        'previousclose' => array('type' => 'float'),
+        'change' => array('type' => 'float'),
+        'percentchange' => array('type' => 'float'),
+        'currency' => array('type' => 'string')
 	);
 
 }

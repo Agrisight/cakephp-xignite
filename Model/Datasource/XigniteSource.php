@@ -14,6 +14,18 @@ App::uses('HttpSocket', 'Network/Http');
 App::uses('Xml', 'Utility');
 App::uses('CakeLog', 'Log');
 
+if (! function_exists('array_change_key_case_recursive')) {
+    function array_change_key_case_recursive($array, $case = CASE_LOWER) {
+        $new = array();
+
+        foreach ($array as $k => $v) {
+            $new[$k] = (is_array($v)) ? array_change_key_case_recursive($v, $case) : $v;
+        }
+
+        return array_change_key_case($new, $case);
+    }
+}
+
 /**
  * StripSource
  *
@@ -86,7 +98,7 @@ class XigniteSource extends DataSource {
 
         $result = array();
         foreach (Set::extract($response, 'FutureQuote.{n}') as $record) {
-            $result[] = array($model->alias => $record);
+            $result[] = array($model->alias => array_change_key_case_recursive($record, CASE_LOWER));
         }
 
 		return $result;
@@ -129,7 +141,6 @@ class XigniteSource extends DataSource {
 
             if ($response['FutureQuotes']['Outcome'] !== 'Success') {
                 $this->lastError = $response['FutureQuotes']['Message'];
-                return false;
             }
 
             return $response['FutureQuotes']['Quotes'];
