@@ -1,8 +1,7 @@
 CakePHP Xignite Plugin
 ======================
 
-This plugin enables access to the Xignite API via a CakePHP plugin.
-https://www.xignite.com/Products/Catalog.aspx?s=MarketData
+This plugin enables access to the [Xignite API][1] via a CakePHP plugin.
 
 All we've actually used it with so far is xFutures.
 
@@ -20,3 +19,4 @@ database.php:
         'key' => 'your_xignite_api_key'
     );
 
+  [1]: https://www.xignite.com/Products/Catalog.aspx?s=MarketData
