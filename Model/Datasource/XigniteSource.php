@@ -129,6 +129,7 @@ class XigniteSource extends DataSource {
 
             if ($response['FutureQuotes']['Outcome'] !== 'Success') {
                 $this->lastError = $response['FutureQuotes']['Message'];
+                return false;
             }
 
             return $response['FutureQuotes']['Quotes'];
