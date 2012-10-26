@@ -22,7 +22,7 @@ class XigniteTick extends XigniteFuturesModel {
         'AsOfDate_EndTime_Month_StartTime_Symbol_TickPeriods_TickPrecision_Year' => array('query' => 'GetHistoricalTicksAsOfDate', 'path' => 'Ticks.Ticks.Tick.{n}'),
         'EndTime_Month_StartTime_Symbol_TickPeriods_TickPrecision_Year' => array('query' => 'GetTicks', 'path' => 'Ticks.Ticks.Tick.{n}'),
         'Month_Symbol_Time_Year' => array('query' => 'GetTick', 'path' => 'SingleTick'),
-        'Symbol' => array('query' => 'GetTick', 'path' => 'SingleTick', 'defaults' => array('Month' => 12, 'Year' => 2012, 'Time' => '23:59:59'))
+        'Symbol' => array('query' => 'GetTick', 'path' => 'SingleTick', 'defaults' => array('Month' => 0, 'Year' => 0, 'Time' => '23:59:59'))
     );
 
 /**
