@@ -96,7 +96,7 @@ class XigniteSource extends DataSource {
 
         $result = array();
         foreach ($response as $record) {
-            $result[] = array($model->alias => array_change_key_case_recursive($record, CASE_LOWER));
+            $result[] = array($model->alias => $record);
         }
 
 		return $result;
@@ -154,13 +154,16 @@ class XigniteSource extends DataSource {
                 return false;
             }
             
-            return isset($data[0]) ? $data : array($data);
+            $data = isset($data[0]) ? $data : array($data);
+            $data = array_change_key_case_recursive($data, CASE_LOWER);
+            
+            return $this->clean($model, $data);
 		} catch (CakeException $e) {
 			$this->lastError = $e->getMessage();
 			CakeLog::write('xignite', $e->getMessage());
 		}
 	}
-
+    
 /**
  * Given a set of request parameters, determine which query should be used.
  * 
@@ -178,6 +181,27 @@ class XigniteSource extends DataSource {
         }
 
         return $model->xignite_queries[$key];
+    }
+
+/**
+ * Clean up the response to match the known schema.
+ * 
+ * @param type $model
+ * @param type $data
+ * @return type 
+ */
+    public function clean($model, $data) {
+        $schema = $this->describe($model);
+        
+        if (empty($schema)) {
+            return $data;
+        }
+
+        foreach ($data as $k => $v) {
+            $data[$k] = array_intersect_key(array_merge(array_fill_keys(array_keys($schema), null), $v), $schema);
+        }
+
+        return $data;
     }
 
 /**
