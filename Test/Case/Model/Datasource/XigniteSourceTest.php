@@ -78,7 +78,7 @@ class XigniteSourceTest extends CakeTestCase {
         );
         $request = array('Symbol' => 'ZC', 'StartDate' => '10/01/2012', 'EndDate' => '10/30/2012');
         $result = $this->Source->mapQuery($model, $request);
-        $this->assertEqual($result, $model->xignite_queries['EndDate_StartDate_Symbol']);
+        $this->assertEqual($result, array_merge($model->xignite_queries['EndDate_StartDate_Symbol'], array('params' => $request)));
     }
 
 /**

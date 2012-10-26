@@ -123,7 +123,7 @@ class XigniteSource extends DataSource {
 				'host' => 'www.xignite.com',
 				'scheme' => 'http',
 				'path' => '/' . $model->xignite_service . '.asmx/' . $query['query'],
-                'query' => array_merge($request, array(
+                'query' => array_merge($query['params'], array(
                     'Header_Username' => $this->config['key']
                 ))
 			),
@@ -179,8 +179,16 @@ class XigniteSource extends DataSource {
         if (! isset($model->xignite_queries[$key])) {
             return false;
         }
+        
+        $query = $model->xignite_queries[$key];
+        
+        if (isset($query['defaults']) && is_array($query['defaults'])) {
+            $query['params'] = array_merge($query['defaults'], $request);
+        } else {
+            $query['params'] = $request;
+        }
 
-        return $model->xignite_queries[$key];
+        return $query;
     }
 
 /**
