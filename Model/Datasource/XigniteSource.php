@@ -75,29 +75,27 @@ class XigniteSource extends DataSource {
  * Reads a Xignite record
  *
  * @param Model $model The calling model
- * @param array $queryData Query data (conditions, limit, etc)
+ * @param array $query Query data (conditions, limit, etc)
  * @return mixed `false` on failure, data on success
  */
-	public function read($model, $queryData = array()) {
-        $request = array();
-
+	public function read($model, $query = array()) {
 		// If calculate() wants to know if the record exists. Say yes.
-		if ($queryData['fields'] == 'COUNT') {
+		if ($query['fields'] == 'COUNT') {
 			return array(array(array('count' => 1)));
 		}
 
-        if (!empty($queryData['conditions'])) {
-            $request['uri']['query'] = $queryData['conditions'];
+        if (! isset($query['conditions'])) {
+            $query['conditions'] = array();
         }
 
-		$response = $this->request($model, $request);
+		$response = $this->request($model, $query['conditions']);
 
 		if ($response === false) {
 			return false;
 		}
 
         $result = array();
-        foreach (Set::extract($response, 'FutureQuote.{n}') as $record) {
+        foreach ($response as $record) {
             $result[] = array($model->alias => array_change_key_case_recursive($record, CASE_LOWER));
         }
 
@@ -105,28 +103,32 @@ class XigniteSource extends DataSource {
 	}
 
 /**
- * Submits a request to Xignite. Requests are merged with default values, such as
- * the api host. If an error occurs, it is stored in `$lastError` and `false` is
- * returned.
+ * Submits a request to Xignite. If an error occurs, it is stored in
+ * `$lastError` and `false` is returned.
  *
- * @param array $request Request details
+ * @param array $conditions
  * @return mixed `false` on failure, data on success
  */
 	public function request($model, $request = array()) {
+        $query = $this->mapQuery($model, $request);
+
+        if (! $query) {
+            $this->lastError = 'Unrecognized set of query parameters.';
+            return false;
+        }
+
 		$this->lastError = null;
 		$this->request = array(
 			'uri' => array(
 				'host' => 'www.xignite.com',
 				'scheme' => 'http',
-				'path' => '/',
-                'query' => array(
+				'path' => '/' . $model->xignite_service . '.asmx/' . $query['query'],
+                'query' => array_merge($request, array(
                     'Header_Username' => $this->config['key']
-                )
+                ))
 			),
 			'method' => 'GET',
 		);
-		$this->request = Set::merge($this->request, $request);
-		$this->request['uri']['path'] = '/' . $model->xignite_service . '.asmx/' . $model->xignite_query;
 
 		try {
 			$http_response = $this->Http->request($this->request);
@@ -137,19 +139,46 @@ class XigniteSource extends DataSource {
                 return false;
 			}
 
-            $response = Xml::toArray(Xml::build($http_response->body));
+            $document = Xml::toArray(Xml::build($http_response->body));
 
-            if ($response['FutureQuotes']['Outcome'] !== 'Success') {
-                $this->lastError = $response['FutureQuotes']['Message'];
+            $contents = current($document);
+            if ($contents['Outcome'] !== 'Success') {
+                $this->lastError = $contents['Message'];
                 return false;
             }
 
-            return $response['FutureQuotes']['Quotes'];
+            $data = Set::extract($document, $query['path']);
+            
+            if (empty($data)) {
+                $this->lastError = 'No data found.';
+                return false;
+            }
+            
+            return isset($data[0]) ? $data : array($data);
 		} catch (CakeException $e) {
 			$this->lastError = $e->getMessage();
 			CakeLog::write('xignite', $e->getMessage());
 		}
 	}
+
+/**
+ * Given a set of request parameters, determine which query should be used.
+ * 
+ * @param type $model   The model being requested
+ * @param type $request The parameters given
+ * @return mixed
+ */
+    public function mapQuery($model, $request) {
+        $params = array_keys($request);
+        sort($params);
+        $key = implode('_', $params);
+
+        if (! isset($model->xignite_queries[$key])) {
+            return false;
+        }
+
+        return $model->xignite_queries[$key];
+    }
 
 /**
  * For checking if record exists. Return COUNT to have read() say yes.

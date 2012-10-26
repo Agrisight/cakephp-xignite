@@ -32,27 +32,45 @@ class XigniteFutureQuoteTestCase extends CakeTestCase {
 	}
 
 /**
- * testRead method
+ * read
  * 
- * @return void
+ * Condition:
  */
     public function testRead() {
-//        $this->Model->find('all', array(
-//            'conditions' => array(
-//                'Symbol' => 'ZCADFS',
-//                'StartDate' => '9/1/2012',
-//                'EndDate' => '9/30/2012'
-//            )
-//        ));
-
-        $this->Model->find('all', array(
+        $result = $this->Model->find('all', array(
             'conditions' => array(
                 'Symbol' => 'ZC',
                 'StartDate' => '9/1/2012',
                 'EndDate' => '9/30/2012'
             )
         ));
+        $this->assertFalse(empty($result));
+        debug($result);
 
+        $result = $this->Model->find('all', array(
+            'conditions' => array(
+                'Symbol' => 'ZC'
+            )
+        ));
+        $this->assertFalse(empty($result));
+        debug($result);
+    }
+
+/**
+ * read
+ * 
+ * Condition: The parameters are invalid.
+ * Result: false 
+ */
+    public function testInvalidRead() {
+        $result = $this->Model->find('all', array(
+            'conditions' => array(
+                'Symbol' => 'ZCADFS',
+                'StartDate' => '9/1/2012',
+                'EndDate' => '9/30/2012'
+            )
+        ));
+        $this->assertFalse($result);
     }
 
 }

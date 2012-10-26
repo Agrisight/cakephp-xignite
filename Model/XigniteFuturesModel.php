@@ -32,6 +32,6 @@ class XigniteFuturesModel extends XigniteAppModel {
  * 
  * @var string
  */
-    public $xignite_query = null;
+    public $xignite_queries = array();
 
 }

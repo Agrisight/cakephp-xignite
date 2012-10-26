@@ -44,7 +44,7 @@ class XigniteAppModel extends AppModel {
  * 
  * @var string
  */
-    public $xignite_query = null;
+    public $xignite_queries = array();
 
 /**
  * Returns the last error from Xignite

@@ -14,11 +14,15 @@ App::uses('XigniteFuturesModel', 'Xignite.Model');
 class XigniteFutureQuote extends XigniteFuturesModel {
 
 /**
- * The identifier for the query
+ * Map of which query should be used for a given set of parameters
  * 
  * @var string
  */
-    public $xignite_query = 'GetHistoricalCommodityRange';
+    public $xignite_queries = array(
+        'EndDate_StartDate_Symbol' => array('query' => 'GetHistoricalCommodityRange', 'path' => 'FutureQuotes.Quotes.FutureQuote.{n}'),
+        'Month_Symbol_Year' => array('query' => 'GetDelayedFuture', 'path' => 'FutureQuote'),
+        'Symbol' => array('query' => 'GetDelayedSpot', 'path' => 'FutureQuote')
+    );
 
 /**
  * Subscription schema
