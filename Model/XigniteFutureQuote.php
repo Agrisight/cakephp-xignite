@@ -30,10 +30,8 @@ class XigniteFutureQuote extends XigniteFuturesModel {
  * @var array
  */
 	public $_schema = array(
-        'outcome' => array('type' => 'string'),
         'delay' => array('type' => 'float'),
         'future' => array('type' => array(
-            'outcome' => array('type' => 'string'),
             'delay' => array('type' => 'float'),
             'symbol' => array('type' => 'string'),
             'name' => array('type' => 'string'),
