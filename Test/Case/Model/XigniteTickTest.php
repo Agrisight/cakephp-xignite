@@ -39,6 +39,14 @@ class XigniteTickTestCase extends CakeTestCase {
     public function testRead() {
         $result = $this->Model->find('all', array(
             'conditions' => array(
+                'Symbol' => 'ZC'
+            )
+        ));
+        debug($result);
+        $this->assertFalse(empty($result));
+
+        $result = $this->Model->find('all', array(
+            'conditions' => array(
                 'Symbol' => 'ZC',
                 'Month' => 12,
                 'Year' => 2012,
