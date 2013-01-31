@@ -78,7 +78,9 @@ class XigniteSource extends DataSource {
  * @param array $query Query data (conditions, limit, etc)
  * @return mixed `false` on failure, data on success
  */
-	public function read(Model $model, $query = array(), $recursive = null) {
+	public function read(Model $model, $query = null, $recursive = null) {
+        if (empty($query)) $query = array();
+
 		// If calculate() wants to know if the record exists. Say yes.
 		if ($query['fields'] == 'COUNT') {
 			return array(array(array('count' => 1)));
