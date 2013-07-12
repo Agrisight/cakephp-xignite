@@ -97,6 +97,15 @@ class XigniteSource extends DataSource {
 		}
 
         $result = array();
+        if (! is_array($response)) {
+            Bugsnag::notifyError('InvalidXigniteResponse', 'Bad response from xignite.', array(
+                'payload' => array(
+                    'response' => $response,
+                    'raw_response' => get_object_vars($this->Http->response)
+                )
+            ));
+            return false;
+        }
         foreach ($response as $record) {
             $result[] = array($model->alias => $record);
         }
