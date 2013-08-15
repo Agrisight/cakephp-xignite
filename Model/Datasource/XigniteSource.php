@@ -143,7 +143,7 @@ class XigniteSource extends DataSource {
 			'uri' => array(
 				'host' => 'www.xignite.com',
 				'scheme' => 'http',
-				'path' => '/' . $model->xignite_service . '.json/' . $query['query'],
+				'path' => '/' . $model->xignite_service . '.asmx/' . $query['query'],
                 'query' => array_merge($query['params'], array(
                     'Header_Username' => $this->config['key']
                 ))
