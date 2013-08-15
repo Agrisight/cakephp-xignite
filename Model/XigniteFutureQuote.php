@@ -1,7 +1,7 @@
 <?php
 /**
  * Future Quote
- * 
+ *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
@@ -15,11 +15,12 @@ class XigniteFutureQuote extends XigniteFuturesModel {
 
 /**
  * Map of which query should be used for a given set of parameters
- * 
+ *
  * @var string
  */
     public $xignite_queries = array(
         'EndDate_StartDate_Symbol' => array('query' => 'GetHistoricalCommodityRange', 'path' => 'FutureQuotes.Quotes.FutureQuote.{n}'),
+        'EndDate_Month_StartDate_Symbol_Year' => array('query' => 'GetHistoricalFutureRange', 'path' => 'FutureQuotes.Quotes.FutureQuote.{n}'),
         'Month_Symbol_Year' => array('query' => 'GetDelayedFuture', 'path' => 'FutureQuote'),
         'Symbol' => array('query' => 'GetDelayedSpot', 'path' => 'FutureQuote')
     );

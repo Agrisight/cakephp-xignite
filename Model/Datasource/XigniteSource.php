@@ -43,15 +43,15 @@ class XigniteSource extends DataSource {
 
 /**
  * Start quote
- * 
- * @var string 
+ *
+ * @var string
  */
 	public $startQuote = '';
 
 /**
  * End quote
- * 
- * @var string 
+ *
+ * @var string
  */
 	public $endQuote = '';
 
@@ -143,7 +143,7 @@ class XigniteSource extends DataSource {
 			'uri' => array(
 				'host' => 'www.xignite.com',
 				'scheme' => 'http',
-				'path' => '/' . $model->xignite_service . '.asmx/' . $query['query'],
+				'path' => '/' . $model->xignite_service . '.json/' . $query['query'],
                 'query' => array_merge($query['params'], array(
                     'Header_Username' => $this->config['key']
                 ))
@@ -169,25 +169,25 @@ class XigniteSource extends DataSource {
             }
 
             $data = Set::extract($document, $query['path']);
-            
+
             if (empty($data)) {
                 $this->lastError = 'No data found.';
                 return false;
             }
-            
+
             $data = isset($data[0]) ? $data : array($data);
             $data = array_change_key_case_recursive($data, CASE_LOWER);
-            
+
             return $this->clean($model, $data);
 		} catch (CakeException $e) {
 			$this->lastError = $e->getMessage();
 			CakeLog::write('xignite', $e->getMessage());
 		}
 	}
-    
+
 /**
  * Given a set of request parameters, determine which query should be used.
- * 
+ *
  * @param type $model   The model being requested
  * @param type $request The parameters given
  * @return mixed
@@ -200,9 +200,9 @@ class XigniteSource extends DataSource {
         if (! isset($model->xignite_queries[$key])) {
             return false;
         }
-        
+
         $query = $model->xignite_queries[$key];
-        
+
         if (isset($query['defaults']) && is_array($query['defaults'])) {
             $query['params'] = array_merge($query['defaults'], $request);
         } else {
@@ -214,14 +214,14 @@ class XigniteSource extends DataSource {
 
 /**
  * Clean up the response to match the known schema.
- * 
+ *
  * @param type $model
  * @param type $data
- * @return type 
+ * @return type
  */
     public function clean($model, $data) {
         $schema = $this->describe($model);
-        
+
         if (empty($schema)) {
             return $data;
         }
