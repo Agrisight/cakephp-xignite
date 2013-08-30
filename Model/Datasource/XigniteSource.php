@@ -163,7 +163,7 @@ class XigniteSource extends DataSource {
             $document = Xml::toArray(Xml::build($http_response->body));
 
             $contents = current($document);
-            if ($contents['Outcome'] !== 'Success') {
+            if (isset($contents['Outcome']) && $contents['Outcome'] !== 'Success') {
                 $this->lastError = $contents['Message'];
                 return false;
             }
