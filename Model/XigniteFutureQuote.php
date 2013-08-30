@@ -22,7 +22,7 @@ class XigniteFutureQuote extends XigniteFuturesModel {
         'EndDate_StartDate_Symbol' => array('query' => 'GetHistoricalCommodityRange', 'path' => 'FutureQuotes.Quotes.FutureQuote.{n}'),
         'EndDate_Month_StartDate_Symbol_Year' => array('query' => 'GetHistoricalFutureRange', 'path' => 'FutureQuotes.Quotes.FutureQuote.{n}'),
         'Month_Symbol_Year' => array('query' => 'GetDelayedFuture', 'path' => 'FutureQuote'),
-        'Symbol' => array('query' => 'GetDelayedSpot', 'path' => 'FutureQuote')
+        'Symbol' => array('query' => 'GetAllDelayedFutures', 'path' => 'ArrayOfFutureQuote.FutureQuote.{n}')
     );
 
 /**
